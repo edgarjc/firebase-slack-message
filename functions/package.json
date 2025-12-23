@@ -3,28 +3,11 @@
   "version": "0.0.1",
   "description": "Cloud Functions for Firestore to Slack notification extension",
   "main": "lib/index.js",
-  "scripts": {
-    "build": "npx tsc",
-    "build:watch": "npx tsc --watch",
-    "lint": "eslint --ext .js,.ts .",
-    "lint:fix": "eslint --ext .js,.ts . --fix",
-    "test": "mocha --reporter spec"
-  },
   "engines": {
     "node": "20"
   },
-  "private": true,
   "dependencies": {
-    "firebase-admin": "^12.1.0",
-    "firebase-functions": "^5.0.0"
-  },
-  "devDependencies": {
-    "@types/node": "^20.11.0",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
-    "eslint": "^8.56.0",
-    "eslint-config-google": "^0.14.0",
-    "eslint-plugin-import": "^2.29.0",
-    "typescript": "^5.3.0"
+    "firebase-admin": "12.1.0",
+    "firebase-functions": "5.0.0"
   }
 }
