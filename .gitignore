@@ -1,8 +1,8 @@
 # Dependencies
 node_modules/
 
-# Build output
-functions/lib/
+# Build output (keeping functions/lib for extension)
+# functions/lib/
 
 # Environment files
 .env
