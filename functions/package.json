@@ -4,8 +4,9 @@
   "description": "Cloud Functions for Firestore to Slack notification extension",
   "main": "lib/index.js",
   "scripts": {
-    "build": "tsc",
-    "build:watch": "tsc --watch",
+    "build": "npx tsc",
+    "build:watch": "npx tsc --watch",
+    "prepare": "npm run build",
     "lint": "eslint --ext .js,.ts .",
     "lint:fix": "eslint --ext .js,.ts . --fix",
     "test": "mocha --reporter spec"

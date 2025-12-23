@@ -15,6 +15,7 @@ author:
   url: https://github.com/edgarjc
 
 sourceUrl: https://github.com/edgarjc/firebase-slack-message
+releaseNotesUrl: https://github.com/edgarjc/firebase-slack-message/blob/master/CHANGELOG.md
 
 billingRequired: true
 
