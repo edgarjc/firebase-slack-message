@@ -24,6 +24,7 @@ resources:
     type: firebaseextensions.v1beta.function
     description: Sends a Slack notification when a document is created
     properties:
+      sourceDirectory: functions
       runtime: nodejs20
       eventTrigger:
         eventType: providers/cloud.firestore/eventTypes/document.create
@@ -33,6 +34,7 @@ resources:
     type: firebaseextensions.v1beta.function
     description: Sends a Slack notification when a document is updated
     properties:
+      sourceDirectory: functions
       runtime: nodejs20
       eventTrigger:
         eventType: providers/cloud.firestore/eventTypes/document.update
@@ -42,6 +44,7 @@ resources:
     type: firebaseextensions.v1beta.function
     description: Sends a Slack notification when a document is deleted
     properties:
+      sourceDirectory: functions
       runtime: nodejs20
       eventTrigger:
         eventType: providers/cloud.firestore/eventTypes/document.delete
