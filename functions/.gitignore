@@ -1,5 +1,5 @@
-# Compiled JavaScript files
-lib/
+# Keep lib/ for Firebase extension builder
+# lib/
 
 # Dependencies
 node_modules/
