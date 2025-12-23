@@ -1,0 +1,187 @@
+name: firestore-send-slack-notification
+version: 0.0.2
+specVersion: v1beta
+
+displayName: Firestore to Slack Notifications
+description: >-
+  Sends Slack notifications when documents are created, updated, or deleted
+  in a specified Firestore collection. Supports nested subcollections,
+  rate limiting, and custom message templates.
+
+license: Apache-2.0
+
+author:
+  authorName: edgarjc
+  url: https://github.com/edgarjc
+
+sourceUrl: https://github.com/edgarjc/firebase-slack-message
+
+billingRequired: true
+
+resources:
+  - name: onDocumentCreated
+    type: firebaseextensions.v1beta.function
+    description: Sends a Slack notification when a document is created
+    properties:
+      runtime: nodejs20
+      eventTrigger:
+        eventType: providers/cloud.firestore/eventTypes/document.create
+        resource: projects/${param:PROJECT_ID}/databases/(default)/documents/${param:COLLECTION_PATH}
+
+  - name: onDocumentUpdated
+    type: firebaseextensions.v1beta.function
+    description: Sends a Slack notification when a document is updated
+    properties:
+      runtime: nodejs20
+      eventTrigger:
+        eventType: providers/cloud.firestore/eventTypes/document.update
+        resource: projects/${param:PROJECT_ID}/databases/(default)/documents/${param:COLLECTION_PATH}
+
+  - name: onDocumentDeleted
+    type: firebaseextensions.v1beta.function
+    description: Sends a Slack notification when a document is deleted
+    properties:
+      runtime: nodejs20
+      eventTrigger:
+        eventType: providers/cloud.firestore/eventTypes/document.delete
+        resource: projects/${param:PROJECT_ID}/databases/(default)/documents/${param:COLLECTION_PATH}
+
+params:
+  - param: COLLECTION_PATH
+    label: Firestore Collection Path
+    description: >-
+      The Firestore collection path to watch for changes. Supports wildcards for nested subcollections.
+      Examples:
+      - "users/{userId}" - Watch all user documents
+      - "users/{userId}/orders/{orderId}" - Watch orders subcollection for all users
+      - "shops/{shopId}/products/{productId}" - Watch products in all shops
+      The path must end with a document wildcard like {docId}.
+    type: string
+    required: true
+    immutable: false
+    default: "collection/{docId}"
+
+  - param: SLACK_WEBHOOK_URL
+    label: Slack Webhook URL
+    description: >-
+      The Slack incoming webhook URL. Create one at https://api.slack.com/messaging/webhooks
+    type: secret
+    required: true
+    immutable: false
+
+  - param: NOTIFY_ON_CREATE
+    label: Notify on Document Create
+    description: Send a notification when a document is created
+    type: select
+    options:
+      - label: Yes
+        value: "true"
+      - label: No
+        value: "false"
+    default: "true"
+    required: true
+
+  - param: NOTIFY_ON_UPDATE
+    label: Notify on Document Update
+    description: Send a notification when a document is updated
+    type: select
+    options:
+      - label: Yes
+        value: "true"
+      - label: No
+        value: "false"
+    default: "true"
+    required: true
+
+  - param: NOTIFY_ON_DELETE
+    label: Notify on Document Delete
+    description: Send a notification when a document is deleted
+    type: select
+    options:
+      - label: Yes
+        value: "true"
+      - label: No
+        value: "false"
+    default: "true"
+    required: true
+
+  - param: ENABLE_RATE_LIMITING
+    label: Enable Rate Limiting
+    description: >-
+      Limit the number of notifications sent to avoid spam during bulk operations.
+    type: select
+    options:
+      - label: Yes
+        value: "true"
+      - label: No
+        value: "false"
+    default: "false"
+    required: true
+
+  - param: RATE_LIMIT_COUNT
+    label: Rate Limit Count
+    description: >-
+      Maximum number of notifications allowed within the rate limit window.
+      Only applies if rate limiting is enabled.
+    type: string
+    default: "10"
+    required: false
+
+  - param: RATE_LIMIT_WINDOW_SECONDS
+    label: Rate Limit Window (seconds)
+    description: >-
+      Time window in seconds for rate limiting. For example, 60 means
+      max notifications per minute. Only applies if rate limiting is enabled.
+    type: string
+    default: "60"
+    required: false
+
+  - param: USE_CUSTOM_TEMPLATE
+    label: Use Custom Message Template
+    description: >-
+      Use a custom Slack message template instead of the default formatted message.
+    type: select
+    options:
+      - label: No (use default formatting)
+        value: "false"
+      - label: Yes (use custom template)
+        value: "true"
+    default: "false"
+    required: true
+
+  - param: CUSTOM_TEMPLATE
+    label: Custom Message Template
+    description: >-
+      Custom Slack message template with placeholders. Available placeholders:
+      - {{action}} - The action type (Created, Updated, Deleted)
+      - {{docId}} - The document ID
+      - {{collection}} - The collection path
+      - {{fullPath}} - Full document path including parent docs
+      - {{timestamp}} - ISO timestamp of the event
+      - {{doc.fieldName}} - Any field from the document (e.g., {{doc.email}}, {{doc.name}})
+      - {{before.fieldName}} - Field value before update (only for updates)
+      - {{after.fieldName}} - Field value after update (only for updates)
+      - {{parentIds.wildcardName}} - Parent document IDs from path (e.g., {{parentIds.userId}})
+      Example: ":bell: New order {{doc.orderId}} by {{doc.customerName}} - ${{doc.total}}"
+    type: string
+    default: ":bell: *{{action}}* in `{{collection}}`\nDocument: `{{docId}}`"
+    required: false
+
+  - param: INCLUDE_DOCUMENT_DATA
+    label: Include Document Data
+    description: Include document data in the Slack notification (for default template)
+    type: select
+    options:
+      - label: Yes
+        value: "true"
+      - label: No
+        value: "false"
+    default: "true"
+    required: true
+
+  - param: MAX_DATA_LENGTH
+    label: Maximum Data Length
+    description: Maximum characters of document data to include (to avoid huge messages)
+    type: string
+    default: "500"
+    required: false
