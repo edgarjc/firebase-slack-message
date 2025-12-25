@@ -1,5 +1,5 @@
 name: firestore-send-slack-notification
-version: 0.0.2
+version: 0.0.3
 specVersion: v1beta
 
 displayName: Firestore to Slack Notifications
@@ -8,7 +8,18 @@ description: >-
   in a specified Firestore collection. Supports nested subcollections,
   rate limiting, and custom message templates.
 
+icon: icon.png
+
 license: Apache-2.0
+
+roles:
+  - role: datastore.user
+    reason: Allows the extension to read Firestore documents that trigger notifications.
+
+externalServices:
+  - name: Slack Incoming Webhooks
+    pricingUri: https://api.slack.com/messaging/webhooks
+    url: https://hooks.slack.com/services/*
 
 author:
   authorName: edgarjc
