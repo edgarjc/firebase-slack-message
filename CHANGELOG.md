@@ -1,3 +1,11 @@
+## Version 0.0.3
+
+Improvements:
+
+- Added extension icon
+- Added required IAM role declaration for Firestore access
+- Declared Slack webhooks as external service
+
 ## Version 0.0.2
 
 New features:
